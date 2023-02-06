@@ -14,6 +14,9 @@ class instruction(ABC):
     the constructor
     """
     self.instr:int = instr
+    self.op_code = int(str(instr)[:2])
+    self.param = int(str(instr[2:]))
+    self.op_name = ""
 
   @abstractmethod
   def exec(self:instruction, vm:virtual_machine):
@@ -21,3 +24,9 @@ class instruction(ABC):
     defined by the child, do whatever the instruction does
     """
     pass
+
+  def __str__(self:instruction) -> str:
+    """
+    overload the string operator for easy printing
+    """
+    return f"instruction:{self.instr} op_code:{self.op_code} param:{self.param} name:{self.op_name}"
