@@ -1,12 +1,6 @@
 from UVSim.instruction import instruction
-class virtualMachine:
-    def __init__(self):
-        self.vmAccumulator = 0
-        self.mainMemory = list(range(100))
-        self.nextInstruction = None
-        self.exit = False
+from UVSim.vm import virtualMachine
 
-#duplicate code-- io.py 
 class write(instruction):
     """
     a class for the write instruction
@@ -23,6 +17,3 @@ class write(instruction):
         #self.param is location in memory of operand to write
         vm.vmAccumulator = vm.mainMemory[self.param]
         print(vm.vmAccumulator)
-    
-
-
