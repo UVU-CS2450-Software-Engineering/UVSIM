@@ -1,10 +1,18 @@
 import sys
-sys.path.insert(0,'../testt')
-# from testt import src
-#import ../src
-from src import *
-#from UVSIM.src import *
-def test_vm():
+import pytest
+from UVSim.src import *
+
+def test_vm_accumulator():
     acc = accumulator()
     obj = virtualMachine(acc)
     assert obj.vmAccumulator.value == 0
+
+def test_vm_default_exit_value():
+    acc = accumulator()
+    obj = virtualMachine(acc)
+    assert obj.exit == False
+
+def test_vm_default_next_instruction_value():
+    acc = accumulator()
+    obj = virtualMachine(acc)
+    assert obj.nextInstruction == None
