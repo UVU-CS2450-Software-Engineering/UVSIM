@@ -23,6 +23,6 @@ class add(instruction):
         store in the accumulator
         """
 
-        vm.vmAccumulator.value = (
-            interpret_as_int(vm.mainMemory[self.param]) + vm.vmAccumulator.value
+        vm.vmAccumulator = (
+            interpret_as_int(vm.mainMemory[self.param]) + vm.vmAccumulator
         )

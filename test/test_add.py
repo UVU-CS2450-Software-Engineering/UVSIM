@@ -3,7 +3,7 @@ import pytest
 
 from UVSim.ADD import add
 from UVSim.instruction import instruction
-from UVSim.vm import virtualMachine, accumulator, nextInstruction
+from UVSim.vm import virtualMachine
 
 
 def test_add():
@@ -20,38 +20,23 @@ def test_add():
     assert str(my_inst) == "instruction:+3000 op_code:30 param:0 name:ADD"
 
     # initialize the virtual machine
-    my_accumulator: accumulator = accumulator()
-    my_nextInstruction: nextInstruction = nextInstruction()
-    my_vm: virtualMachine = virtualMachine(my_accumulator)
+    my_vm: virtualMachine = virtualMachine()
     my_vm.mainMemory = main_memory
-    my_vm.vmAccumulator = my_accumulator
-    my_vm.nextInstruction = my_nextInstruction
 
     my_inst.exec(my_vm)
 
-    assert my_vm.vmAccumulator.value == 100
+    assert my_vm.vmAccumulator == 100
 
     # This instruction means add the value stored at memory location 1
     # To the accumulator (100 + -101) the result should be -1
     main_memory[1] = "-0101"
     my_inst = add("+3001")
     my_inst.exec(my_vm)
-    print(my_vm.vmAccumulator.value)
-    assert my_vm.vmAccumulator.value == -1
+    print(my_vm.vmAccumulator)
+    assert my_vm.vmAccumulator == -1
 
 
 def test_add_errors():
     # This should throw an error becuase of wrong opcode
     with pytest.raises(Exception):
         my_instruction: instruction = add("+3100")
-
-
-def main():
-    """
-    quick testing main
-    """
-    test_add()
-
-
-if __name__ == "__main__":
-    main()
