@@ -16,9 +16,9 @@ class instruction(ABC):
         """
         the constructor
         """
-        self.instr: int = instr
-        self.op_code = int(str(instr)[:2])
-        self.param = int(str(instr[2:]))
+        self.instr: int = instr # What is the colon for?
+        self.op_code = int(str(instr)[:2]) # What does [:2] do?
+        self.param = int(str(instr[2:])) # What does [2:] do?
         self.op_name = ""
 
     @abstractmethod
