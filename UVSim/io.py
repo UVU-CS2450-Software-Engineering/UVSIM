@@ -1,13 +1,7 @@
 from UVSim.instruction import instruction
+from UVSim.vm import virtualMachine
 import re
-class virtualMachine:
-    def __init__(self):
-        self.vmAccumulator = 0
-        self.mainMemory = list(range(100))
-        self.nextInstruction = None
-        self.exit = False
 
-#duplicate code-- io.py 
 class write(instruction):
     """
     a class for the write instruction
@@ -45,6 +39,3 @@ class read(instruction):
             raise ValueError(f'Invalid word')
         vm.vmAccumulator = inp
         vm.mainMemory[self.param]=vm.vmAccumulator
-    
-
-
