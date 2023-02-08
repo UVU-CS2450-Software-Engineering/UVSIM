@@ -9,3 +9,15 @@ def test_no_file():
 def test_dummy_file():
     commands = read_ml.read_ml('test/test1.txt')
     assert len(commands) == 11
+
+def test_invalid_entry():
+    commands = read_ml.read_ml('test/testInvalid.txt')
+    assert not commands
+
+def test_max_program():
+    commands = read_ml.read_ml('test/testMax.txt')
+    assert len(commands) == 100
+
+def test_overflow():
+    commands = read_ml.read_ml('test/testOverflow.txt')
+    assert not commands
