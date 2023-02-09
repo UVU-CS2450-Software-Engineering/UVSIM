@@ -1,6 +1,7 @@
-from __future__ import annotations # What is this?
-from instruction import instruction
-from virtual_machine import virtual_machine
+from __future__ import annotations
+from UVSim.instruction import instruction
+from UVSim.vm import virtualMachine
+from UVSim.util import interpret_as_int
 
 
 class subtract(instruction):
@@ -8,18 +9,20 @@ class subtract(instruction):
     a class for the subtract instruction
     """
 
-    def __init__(self: instruction, instr: int) -> None: #What's happening here. instr is the 2 digit instruction. What is self: instruction?
-        super().__init__(instr) # This is calling instruction constructor
+    def __init__(self: instruction, instr: int) -> None:
+        super().__init__(instr)
         self.op_name: str = "SUBTRACT"
         assert (
             self.op_code == 31
-        ), "Tried to create an subtract  instruction with mismatched op code" # What is this assert statement for and the ,
+        ), "Tried to create an subtract  instruction with mismatched op code"
 
-    def exec(self: instruction, vm: virtual_machine):
+    def exec(self: instruction, vm: virtualMachine):
         """
-        take the location from the last two digits (main_memory)
-        and subtract it by the value in the accumulator
+        take the accumulator 
+        and subtract it by the last two digits (main_memory)
         store in the accumulator
         """
 
-        vm.accumulator = vm.accumulator - vm.main_memory[self.param]# Is the accumulator just an int?
+        vm.vmAccumulator = (
+            vm.vmAccumulator - interpret_as_int(vm.mainMemory[self.param])
+        )
