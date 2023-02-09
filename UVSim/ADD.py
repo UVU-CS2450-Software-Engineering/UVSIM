@@ -9,7 +9,7 @@ class add(instruction):
     a class for the add instruction
     """
 
-    def __init__(self: instruction, instr: int) -> None:
+    def __init__(self: instruction, instr: str) -> None:
         super().__init__(instr)
         self.op_name: str = "ADD"
         assert (
