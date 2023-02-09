@@ -2,7 +2,7 @@ from UVSim.instruction import instruction
 from UVSim.vm import virtualMachine
 import re
 
-
+#io file
 class write(instruction):
     """
     a class for the write instruction
