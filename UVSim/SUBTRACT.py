@@ -22,4 +22,4 @@ class subtract(instruction):
         store in the accumulator
         """
 
-        vm.accumulator = vm.main_memory[self.param] - vm.accumulator # Is the accumulator just an int?
+        vm.accumulator = vm.accumulator - vm.main_memory[self.param]# Is the accumulator just an int?
