@@ -43,17 +43,17 @@ def test_read_param():
 def test_read_accum_value(monkeypatch):
     obj = virtualMachine()
     instr = read("+1035")
-    monkeypatch.setattr("builtins.input", lambda _: "5240")
+    monkeypatch.setattr("builtins.input", lambda _: "+5240")
     instr.exec(obj)
-    assert obj.vmAccumulator == "5240"
+    assert obj.vmAccumulator == "+5240"
 
 
 def test_read_memory_value(monkeypatch):
     obj = virtualMachine()
     instr = read("+1035")
-    monkeypatch.setattr("builtins.input", lambda _: "5240")
+    monkeypatch.setattr("builtins.input", lambda _: "+5240")
     instr.exec(obj)
-    assert obj.mainMemory[35] == "5240"
+    assert obj.mainMemory[35] == "+5240"
 
 
 def test_read_regex():
