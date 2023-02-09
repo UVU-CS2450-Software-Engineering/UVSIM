@@ -10,7 +10,6 @@ class write(instruction):
 
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
-        print(self.op_code)
         self.op_name: str = "WRITE"
         assert (
             self.op_code == 11
