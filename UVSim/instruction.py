@@ -1,7 +1,6 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
-
-# from UVSim import virtual_machine
+from UVSim.vm import virtualMachine
 
 
 class instruction(ABC):
@@ -12,17 +11,18 @@ class instruction(ABC):
     """
 
     @abstractmethod
-    def __init__(self: instruction, instr: int) -> None:
+    def __init__(self: instruction, instr: str) -> None:
         """
         the constructor
         """
-        self.instr: int = instr # What is the colon for?
-        self.op_code = int(str(instr)[:2]) # What does [:2] do?
-        self.param = int(str(instr[2:])) # What does [2:] do?
+        self.instr: str = instr
+        # starts at one to remove the + or - characters
+        self.op_code: int = int(instr[1:3])
+        self.param: int = int(instr[3:])
         self.op_name = ""
 
     @abstractmethod
-    def exec(self: instruction, vm: virtual_machine):
+    def exec(self: instruction, vm: virtualMachine):
         """
         defined by the child, do whatever the instruction does
         """
