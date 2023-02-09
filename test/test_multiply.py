@@ -33,7 +33,6 @@ def test_multiply():
     main_memory[1] = "-0101"
     my_inst = multiply("+3301")
     my_inst.exec(my_vm)
-    print(my_vm.vmAccumulator)
     assert my_vm.vmAccumulator == -606
 
 
