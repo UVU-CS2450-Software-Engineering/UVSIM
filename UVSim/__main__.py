@@ -15,10 +15,11 @@ vm = virtualMachine()
 program_path = input('Enter program path to run: ')
 
 memory = read_ml(program_path)
-if memory['success']:
+if 'result' in memory.keys():
     vm.mainMemory = memory
 
 else:
+    print(memory);
     print (f'Error: {memory["error"]}\nPress any key to exit program...')
     input()
     sys.exit()
