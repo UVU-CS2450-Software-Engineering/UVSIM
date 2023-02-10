@@ -7,7 +7,6 @@ def read_ml(path):
         with open(path, 'r') as prgm:
             instruction = prgm.readline().strip()
             while instruction:
-                print(len(instructions))
                 if len(instructions) > 100:
                     raise BufferError('Memory Overflow: Too many lines in program.')
                 # Regex to validate format
