@@ -1,7 +1,6 @@
 from __future__ import annotations
 from UVSim.instruction import instruction
 from UVSim.vm import virtualMachine
-from UVSim.util import interpret_as_int
 
 class branchneg(instruction):
     """
