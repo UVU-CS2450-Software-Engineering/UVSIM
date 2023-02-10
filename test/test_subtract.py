@@ -29,10 +29,7 @@ def test_subtract():
     # Accumulator stores result. Should be -201
     main_memory[1] = "-0101"
     my_inst = subtract("+3101")
-    print(my_vm.vmAccumulator)
-    print(my_vm.mainMemory[1])
     my_inst.exec(my_vm)
-    print(my_vm.vmAccumulator)
     assert my_vm.vmAccumulator == 1
 
     def test_subtract_errors():
