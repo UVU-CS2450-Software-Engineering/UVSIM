@@ -2,7 +2,7 @@ from __future__ import annotations
 from UVSim.instruction import instruction
 from UVSim.vm import virtualMachine
 
-class branchneg(instruction):
+class branch_neg(instruction):
     """
     a class for the branchneg instruction
     """

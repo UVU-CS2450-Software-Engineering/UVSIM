@@ -2,7 +2,7 @@ from __future__ import annotations
 from UVSim.instruction import instruction
 from UVSim.vm import virtualMachine
 
-class branchzero(instruction):
+class branch_zero(instruction):
     """
     a class for the branchzero instruction
     """
