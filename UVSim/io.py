@@ -39,7 +39,7 @@ class read(instruction):
         # self.param is location in memory of destination to write to
         inp = input("Enter a word to read to memory: ")
         # Regex to validate format
-        if not re.search("^((\+|-)\d{4})$", inp):
+        if not re.search("^(([+]|-)\d{4})$", inp):
             raise ValueError(f"Invalid word")
         vm.vmAccumulator = inp
         vm.mainMemory[self.param] = vm.vmAccumulator
