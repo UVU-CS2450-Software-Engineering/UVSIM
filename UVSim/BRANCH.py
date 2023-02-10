@@ -1,7 +1,6 @@
 from __future__ import annotations
 from UVSim.instruction import instruction
 from UVSim.vm import virtualMachine
-from UVSim.util import interpret_as_int
 
 class branch(instruction):
     """
@@ -9,10 +8,10 @@ class branch(instruction):
     """
     def __init__(self: instruction, instr: str) -> None:
         super().__init__(instr)
-        self.op_name: STR = "BRANCH"
+        self.op_name: str = "BRANCH"
         assert (
             self.op_code == 40
-        ), "Tried to create an divide instruction with mismatched op code"
+        ), "Tried to create an branch instruction with mismatched op code"
 
     def exec(self: instruction, vm: virtualMachine):
         """
