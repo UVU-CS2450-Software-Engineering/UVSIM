@@ -1,36 +1,33 @@
-# Place the code to run the package here
+'''
+Driver for UVSim package
+Usage: python -m UVSim
+'''
+
+import sys
 
 from UVSim.read_ml import read_ml
-from UVSim.virtual_machine import VirtualMachine
+from UVSim.vm import virtualMachine
+from UVSim.fetch import fetch
+from UVSim.decode import decode
 
-vm = VirtualMachine()
+vm = virtualMachine()
 
 program_path = input('Enter program path to run: ')
 
-vm.instructions = read_ml(program_path)
+memory = read_ml(program_path)
+if memory['success']:
+    vm.mainMemory = memory
+
+else:
+    print (f'Error: {memory["error"]}\nPress any key to exit program...')
+    input()
+    sys.exit()
+
 
 while True:
-    result = vm.execute()
-    # Expected values for result from vm.execute()
-    # Successfully completed actions that require no IO - no return statement (or return None)
-    # Input required - return {input: True, text: 'Message describing required input: '}
-    # Output - return {output: True, text: 'Message/value to be displayed'}
-    # Program complete - return {complete: True}
-    # Error in execution - return {error: 'Descriptive error message'}
-
-    if result == None: continue
-    elif result.input:
-        data = input(result.text)
-        vm.executeInput(data)
-    elif result.output:
-        print(result.text)
-    elif result.complete:
+    mem_val = fetch(vm)
+    decode(mem_val)
+    if vm.exit:
         print('Program complete. Press any key to continue...')
-        input()
-        break
-    else:
-        print(f'Error occurred:\n{result.error}')
-        print('-' * 20)
-        print('Press any key to continue...')
         input()
         break
