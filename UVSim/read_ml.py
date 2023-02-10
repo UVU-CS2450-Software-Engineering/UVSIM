@@ -1,4 +1,5 @@
 import re
+init_word = '+0000'
 
 def read_ml(path):
     '''Reads in a supplied program file and stores each line as an element in a list'''
@@ -14,6 +15,8 @@ def read_ml(path):
                     raise ValueError(f'Invalid word at line: {len(instructions) + 1}')
                 instructions.append(instruction)
                 instruction = prgm.readline().strip()
+        while len(instructions) < 100:
+            instructions.append(init_word)
         return {'result': instructions}
     except BufferError as e:
         return {'error': e}

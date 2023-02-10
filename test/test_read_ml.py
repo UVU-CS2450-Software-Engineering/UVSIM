@@ -8,7 +8,7 @@ def test_no_file():
 
 def test_dummy_file():
     commands = read_ml.read_ml('test/test1.txt')
-    assert len(commands['result']) == 11
+    assert len(commands['result']) == 100
 
 def test_invalid_entry():
     commands = read_ml.read_ml('test/testInvalid.txt')
