@@ -328,7 +328,7 @@ def test_store_mem_value():
     instr.exec(obj)
     assert(obj.mainMemory[35] == '+0091')
 
-def test_load_bad_opcode():
+def test_store_bad_opcode():
     obj = virtualMachine()
     # create store instruction with write opcode
     with pytest.raises(AssertionError):
