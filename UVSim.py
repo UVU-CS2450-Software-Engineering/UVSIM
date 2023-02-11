@@ -5,20 +5,17 @@ Usage: python -m UVSim
 
 import sys
 
-from UVSim.read_ml import read_ml
-from UVSim.vm import virtualMachine
-from UVSim.fetch import fetch
-from UVSim.decode import decode
+from UVSim import *
 
 def displayError(e):
     print(e)
     sys.exit()
 
-vm = virtualMachine()
+vm = vm.virtualMachine()
 
 program_path = input('Enter program path to run: ')
 
-memory = read_ml(program_path)
+memory = read_ml.read_ml(program_path)
 if 'result' in memory.keys():
     vm.mainMemory = memory['result']
 
@@ -27,8 +24,8 @@ else:
 
 while not vm.exit:
     try:
-        mem_val = fetch(vm)
-        instruction = decode(mem_val)
+        mem_val = fetch.fetch(vm)
+        instruction = decode.decode(mem_val)
         instruction.exec(vm)
     except Exception as e:
         displayError(e)

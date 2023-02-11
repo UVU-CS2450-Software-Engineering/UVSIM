@@ -15,4 +15,4 @@ def test_vm_default_exit_value():
 
 def test_vm_default_next_instruction_value():
     obj = virtualMachine()
-    assert obj.nextInstruction == None
+    assert obj.nextInstruction == 0
