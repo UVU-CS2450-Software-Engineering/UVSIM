@@ -1,5 +1,5 @@
 from UVSim.instruction import instruction
-from UVSim.io import read, write
+from UVSim.io import read, write, load, store
 from UVSim.BRANCH import branch
 from UVSim.BRANCHNEG import branch_neg
 from UVSim.BRANCHZERO import branch_zero
@@ -10,8 +10,6 @@ from UVSim.MULTIPLY import multiply
 from UVSim.HALT import halt
 
 # Import remaining instructions
-# TODO: load
-# TODO: store
 # TODO: subtract
 # TODO: divide
 # TODO: multiply
@@ -36,14 +34,14 @@ def decode(instr_str: str) -> instruction:
         # write instruction
         my_instruction = write(instr_str)
         pass
-    # elif op_code == 20:
-    #     # load instruction
-    #     my_instruction = load(instr_str)
-    #     pass
-    # elif op_code == 21:
-    #     # store instruction
-    #     my_instruction = store(instr_str)
-    #     pass
+    elif op_code == 20:
+        # load instruction
+        my_instruction = load(instr_str)
+        pass
+    elif op_code == 21:
+        # store instruction
+        my_instruction = store(instr_str)
+        pass
     elif op_code == 30:
         # add instruction
         my_instruction = add(instr_str)
