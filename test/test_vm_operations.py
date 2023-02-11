@@ -31,10 +31,10 @@ def test_branch():
     my_inst.exec(my_vm)
     assert my_vm.nextInstruction == 25
 
-    def test_branch_errors():
-        # This should throw an error becuase of wrong opcode
-        with pytest.raises(Exception):
-            my_instruction: instruction = branch("+3000")
+def test_branch_errors():
+    # This should throw an error becuase of wrong opcode
+    with pytest.raises(Exception):
+        my_instruction: instruction = branch("+3000")
 
 def test_branchneg():
     """
@@ -64,10 +64,10 @@ def test_branchneg():
     my_inst.exec(my_vm)
     assert my_vm.nextInstruction ==25
 
-    def test_branchneg_errors():
-        # This should throw an error becuase of wrong opcode
-        with pytest.raises(Exception):
-            my_instruction: instruction = branch_neg("+3000")
+def test_branchneg_errors():
+    # This should throw an error becuase of wrong opcode
+    with pytest.raises(Exception):
+        my_instruction: instruction = branch_neg("+3000")
 
 def test_branchzero():
     """
@@ -98,10 +98,10 @@ def test_branchzero():
     my_inst.exec(my_vm)
     assert my_vm.nextInstruction == 25
 
-    def test_branchzero_errors():
-        # This should throw an error becuase of wrong opcode
-        with pytest.raises(Exception):
-            my_instruction: instruction = branch_zero("+3000")
+def test_branchzero_errors():
+    # This should throw an error becuase of wrong opcode
+    with pytest.raises(Exception):
+        my_instruction: instruction = branch_zero("+3000")
 
 def test_add():
     """
@@ -267,15 +267,6 @@ def test_write_param():
     obj.mainMemory[35] = 75
     instr = write("+1135")
     assert instr.param == 35
-
-# def test_write_accum_value():
-#     obj = virtualMachine()
-#     obj.mainMemory[35] = 75
-#     # create write instruction
-#     instr = write("+1135")
-#     # execute write instruction
-#     instr.exec(obj)
-#     assert obj.vmAccumulator == 75
 
 def test_read_wrong_opcode():
     obj = virtualMachine()
