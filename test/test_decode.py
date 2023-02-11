@@ -1,9 +1,7 @@
 import pytest
 
 from UVSim.decode import decode
-from UVSim.instruction import instruction
-from UVSim.ADD import add
-from UVSim.io import read, write
+from UVSim.vm_operations import *
 
 
 def test_decode():

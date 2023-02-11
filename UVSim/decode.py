@@ -1,13 +1,4 @@
-from UVSim.instruction import instruction
-from UVSim.io import read, write, load, store
-from UVSim.BRANCH import branch
-from UVSim.BRANCHNEG import branch_neg
-from UVSim.BRANCHZERO import branch_zero
-from UVSim.ADD import add
-from UVSim.SUBTRACT import subtract
-from UVSim.DIVIDE import divide
-from UVSim.MULTIPLY import multiply
-from UVSim.HALT import halt
+from UVSim.vm_operations import *
 
 # Import remaining instructions
 # TODO: subtract
