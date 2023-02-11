@@ -179,7 +179,7 @@ class divide(instruction):
         """
 
         vm.vmAccumulator = (
-            vm.vmAccumulator / interpret_as_int(vm.mainMemory[self.param])
+            vm.vmAccumulator // interpret_as_int(vm.mainMemory[self.param])
         )
 
 class halt(instruction):
@@ -214,8 +214,9 @@ class write(instruction):
     # get word from memorylocation, move it into the accumulator, output it to the screen
     def exec(self: instruction, vm: virtualMachine):
         # self.param is location in memory of operand to write
-        vm.vmAccumulator = vm.mainMemory[self.param]
-        print(vm.vmAccumulator)
+        # vm.vmAccumulator = vm.mainMemory[self.param]
+        # print(vm.vmAccumulator)
+        print(vm.mainMemory[self.param])
 
 class read(instruction):
     """
@@ -237,7 +238,9 @@ class read(instruction):
         if not re.search("^(([+]|-)?\d{1,4})$", inp):
             raise ValueError(f"Invalid word")
         vm.vmAccumulator = int(inp)
-        vm.mainMemory[self.param] = vm.vmAccumulator
+        sign = '+' if vm.vmAccumulator >= 0 else '-'
+        vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
+        # vm.mainMemory[self.param] = vm.vmAccumulator
 
 class load(instruction):
     """
@@ -272,4 +275,4 @@ class store(instruction):
     def exec(self: instruction, vm: virtualMachine):
         # self.param is location in memory of destination
         sign = '+' if vm.vmAccumulator >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{vm.vmAccumulator:0>4}'
+        vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
