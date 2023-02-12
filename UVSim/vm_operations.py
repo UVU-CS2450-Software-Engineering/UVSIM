@@ -237,10 +237,9 @@ class read(instruction):
         # Regex to validate format
         if not re.search("^(([+]|-)?\d{1,4})$", inp):
             raise ValueError(f"Invalid word")
-        vm.vmAccumulator = int(inp)
-        sign = '+' if vm.vmAccumulator >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
-        # vm.mainMemory[self.param] = vm.vmAccumulator
+        temp = int(inp)
+        sign = '+' if temp >= 0 else '-'
+        vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
 
 class load(instruction):
     """
