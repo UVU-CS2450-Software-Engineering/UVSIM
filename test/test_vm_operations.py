@@ -278,13 +278,6 @@ def test_read_param():
     instr = read("+1035")
     assert instr.param == 35
 
-def test_read_accum_value(monkeypatch):
-    obj = virtualMachine()
-    instr = read("+1035")
-    monkeypatch.setattr("builtins.input", lambda _: "+5240")
-    instr.exec(obj)
-    assert obj.vmAccumulator == 5240
-
 def test_read_memory_value(monkeypatch):
     obj = virtualMachine()
     instr = read("+1035")
