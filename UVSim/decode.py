@@ -12,8 +12,7 @@ from UVSim.vm_operations import *
 
 def decode(instr_str: str) -> instruction:
     """
-    given an instruction string return the proper child class
-    of instruction
+    given an instruction string return the proper child class of instruction
     """
     op_code = int(instr_str[1:3])
     my_instruction: instruction = None

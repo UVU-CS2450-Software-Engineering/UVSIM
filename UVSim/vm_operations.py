@@ -6,6 +6,7 @@ from UVSim.util import interpret_as_int
 
 class instruction(ABC):
     """
+    common structure for all instructions carried out by the virtual machine
     op_name:str
     param:int
     instr:int
@@ -65,8 +66,7 @@ class branch_neg(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        Check if the accumulator is negative. If so set the 
-        nextInstruction pointer to the arguement passed in param
+        Check if the accumulator is negative. If so, set the nextInstruction pointer to the argument passed in param
         """
         if vm.vmAccumulator < 0:
             vm.nextInstruction = self.param
@@ -84,8 +84,7 @@ class branch_zero(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        Check if the accumulator is zero. If so set the 
-        nextInstruction pointer to the argument passed in param
+        Check if the accumulator value is zero. If so, set the nextInstruction pointer to the argument passed in param
         """
         if vm.vmAccumulator == 0:
             vm.nextInstruction = self.param
@@ -104,8 +103,7 @@ class add(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        take the location from the last two digits (main_memory)
-        and add it to the value in the accumulator
+        take the value from the location in memory given by the last two digits of the opcode and add it to the value in the accumulator
         store in the accumulator
         """
 
@@ -127,8 +125,7 @@ class subtract(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        take the accumulator 
-        and subtract it by the last two digits (main_memory)
+        take the value in the accumulator and subtract it by value from the location in memory given by the last two digits of the opcode
         store in the accumulator
         """
 
@@ -150,8 +147,7 @@ class multiply(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        take the location from the last two digits (main_memory)
-        and multiply it by the value in the accumulator
+        take the value from the location in memory given by the last two digits of the opcode and multiply it by the value in the accumulator
         store in the accumulator
         """
 
@@ -173,8 +169,7 @@ class divide(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        take the accumulator 
-        and divide it by the last two digits (main_memory)
+        take the value in the accumulator and divide it by the value in memory given by the last two digits of the opcode
         store in the accumulator
         """
 
@@ -195,7 +190,7 @@ class halt(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         """
-        Set the vm.exit bool to True
+        Set the vm.exit boolean to True
         """
         vm.exit = True
 
@@ -211,8 +206,11 @@ class write(instruction):
             self.op_code == 11
         ), "Tried to create a write instruction with mismatched op code"
 
-    # get word from memorylocation, move it into the accumulator, output it to the screen
     def exec(self: instruction, vm: virtualMachine):
+        '''
+        get word from the memory location given by the last two digits of the opcode, move it into the accumulator,
+        output it to the screen
+        '''
         # self.param is location in memory of operand to write
         # vm.vmAccumulator = vm.mainMemory[self.param]
         # print(vm.vmAccumulator)
@@ -230,9 +228,11 @@ class read(instruction):
             self.op_code == 10
         ), "Tried to create a read instruction with mismatched op code"
 
-    # get word from user, move it into the accumulator, put it in memorylocation
     def exec(self: instruction, vm: virtualMachine):
-        # self.param is location in memory of destination to write to
+        '''
+        get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
+        self.param is location in memory of destination to write to
+        '''
         inp = input("Enter a word to read to memory: ")
         # Regex to validate format
         if not re.search("^(([+]|-)?\d{1,4})$", inp):
@@ -284,8 +284,8 @@ class load(instruction):
             self.op_code == 20
         ), "Tried to create a load instruction with mismatched op code"
 
-    # get word from memorylocation, move it into the accumulator
     def exec(self: instruction, vm: virtualMachine):
+        '''get word from the memory location given by the last two digits of the opcode, move it into the accumulator'''
         # self.param is location in memory of operand to write
         vm.vmAccumulator = int(vm.mainMemory[self.param])
 
@@ -301,8 +301,8 @@ class store(instruction):
             self.op_code == 21
         ), "Tried to create a store instruction with mismatched op code"
 
-    #Store a word from the accumulator into a specific location in memory.
     def exec(self: instruction, vm: virtualMachine):
+        '''Store a word from the accumulator into a specific location in memory given by the last two digits of the opcode'''
         # self.param is location in memory of destination
         sign = '+' if vm.vmAccumulator >= 0 else '-'
         vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
