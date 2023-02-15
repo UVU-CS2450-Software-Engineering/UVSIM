@@ -23,12 +23,15 @@ else:
     displayError(f'Error: {memory["error"]}')
 
 while not vm.exit:
-    try:
-        mem_val = fetch.fetch(vm)
-        instruction = decode.decode(mem_val)
-        instruction.exec(vm)
-    except Exception as e:
-        displayError(e)
+    while not vm.awaitInput:
+        try:
+            mem_val = fetch(vm)
+            instruction = decode(mem_val)
+            instruction.exec(vm)
+        except Exception as e:
+            displayError(e)
+    value = input("Enter a word to read to memory: ")
+    vm.reader.validateInput(vm, value)
 
 print('Program complete. Press any key to continue...')
 input()

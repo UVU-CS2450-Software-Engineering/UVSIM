@@ -241,6 +241,37 @@ class read(instruction):
         sign = '+' if temp >= 0 else '-'
         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
 
+class readRequest(instruction):
+    """
+    Request input from the user
+    """
+    def __init__(self: instruction, instr: int) -> None:
+        super().__init__(instr)
+        self.op_name: str = "READ"
+        assert (
+            self.op_code == 10
+        ), "Tried to create a read instruction with mismatched op code"
+
+    # get word from user, move it into the accumulator, put it in memorylocation
+    def exec(self: instruction, vm: virtualMachine):
+        vm.awaitInput = True;
+        vm.reader = self
+
+
+        # # self.param is location in memory of destination to write to
+        # inp = input("Enter a word to read to memory: ")
+        
+    
+    def validateInput(self, vm: virtualMachine, value: str):
+        # Regex to validate format
+        if not re.search("^(([+]|-)?\d{1,4})$", value):
+            raise ValueError(f"Invalid word")
+        temp = int(value)
+        sign = '+' if temp >= 0 else '-'
+        vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        vm.awaitInput = False
+
+
 class load(instruction):
     """
     a class for the load instruction
