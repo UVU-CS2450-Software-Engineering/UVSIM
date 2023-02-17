@@ -216,32 +216,32 @@ class write(instruction):
         # print(vm.vmAccumulator)
         print(vm.mainMemory[self.param])
 
+# class read(instruction):
+#     """
+#     a class for the read instruction
+#     """
+
+#     def __init__(self: instruction, instr: int) -> None:
+#         super().__init__(instr)
+#         self.op_name: str = "READ"
+#         assert (
+#             self.op_code == 10
+#         ), "Tried to create a read instruction with mismatched op code"
+
+#     def exec(self: instruction, vm: virtualMachine):
+#         '''
+#         get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
+#         self.param is location in memory of destination to write to
+#         '''
+#         inp = input("Enter a word to read to memory: ")
+#         # Regex to validate format
+#         if not re.search("^(([+]|-)?\d{1,4})$", inp):
+#             raise ValueError(f"Invalid word")
+#         temp = int(inp)
+#         sign = '+' if temp >= 0 else '-'
+#         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+
 class read(instruction):
-    """
-    a class for the read instruction
-    """
-
-    def __init__(self: instruction, instr: int) -> None:
-        super().__init__(instr)
-        self.op_name: str = "READ"
-        assert (
-            self.op_code == 10
-        ), "Tried to create a read instruction with mismatched op code"
-
-    def exec(self: instruction, vm: virtualMachine):
-        '''
-        get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
-        self.param is location in memory of destination to write to
-        '''
-        inp = input("Enter a word to read to memory: ")
-        # Regex to validate format
-        if not re.search("^(([+]|-)?\d{1,4})$", inp):
-            raise ValueError(f"Invalid word")
-        temp = int(inp)
-        sign = '+' if temp >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
-
-class readRequest(instruction):
     """
     Request input from the user
     """
@@ -256,8 +256,6 @@ class readRequest(instruction):
     def exec(self: instruction, vm: virtualMachine):
         vm.awaitInput = True;
         vm.reader = self
-
-
         # # self.param is location in memory of destination to write to
         # inp = input("Enter a word to read to memory: ")
         
@@ -270,6 +268,7 @@ class readRequest(instruction):
         sign = '+' if temp >= 0 else '-'
         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
         vm.awaitInput = False
+        vm.reader = None
 
 
 class load(instruction):

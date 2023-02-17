@@ -278,12 +278,20 @@ def test_read_param():
     instr = read("+1035")
     assert instr.param == 35
 
-def test_read_memory_value(monkeypatch):
+# def test_read_memory_value(monkeypatch):
+#     obj = virtualMachine()
+#     instr = read("+1035")
+#     monkeypatch.setattr("builtins.input", lambda _: "+5240")
+#     instr.exec(obj)
+#     assert obj.mainMemory[35] == '+5240'
+
+def test_read_input():
     obj = virtualMachine()
-    instr = read("+1035")
-    monkeypatch.setattr("builtins.input", lambda _: "+5240")
+    instr = read('+1035')
     instr.exec(obj)
-    assert obj.mainMemory[35] == '+5240'
+    assert obj.awaitInput
+    obj.reader.validateInput(obj, '27')
+    assert obj.mainMemory[35] == '+0027'
 
 def test_read_regex():
     obj = virtualMachine()

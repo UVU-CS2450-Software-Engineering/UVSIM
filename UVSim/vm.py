@@ -8,3 +8,4 @@ class virtualMachine:
         self.nextInstruction = 0
         self.exit = False
         self.awaitInput = False
+        self.reader = None
