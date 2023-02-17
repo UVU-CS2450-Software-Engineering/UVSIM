@@ -7,3 +7,5 @@ class virtualMachine:
         self.mainMemory = list(range(100))
         self.nextInstruction = 0
         self.exit = False
+        self.awaitInput = False
+        self.reader = None

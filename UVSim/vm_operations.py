@@ -216,11 +216,35 @@ class write(instruction):
         # print(vm.vmAccumulator)
         print(vm.mainMemory[self.param])
 
+# class read(instruction):
+#     """
+#     a class for the read instruction
+#     """
+
+#     def __init__(self: instruction, instr: int) -> None:
+#         super().__init__(instr)
+#         self.op_name: str = "READ"
+#         assert (
+#             self.op_code == 10
+#         ), "Tried to create a read instruction with mismatched op code"
+
+#     def exec(self: instruction, vm: virtualMachine):
+#         '''
+#         get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
+#         self.param is location in memory of destination to write to
+#         '''
+#         inp = input("Enter a word to read to memory: ")
+#         # Regex to validate format
+#         if not re.search("^(([+]|-)?\d{1,4})$", inp):
+#             raise ValueError(f"Invalid word")
+#         temp = int(inp)
+#         sign = '+' if temp >= 0 else '-'
+#         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+
 class read(instruction):
     """
-    a class for the read instruction
+    Request input from the user
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "READ"
@@ -228,18 +252,24 @@ class read(instruction):
             self.op_code == 10
         ), "Tried to create a read instruction with mismatched op code"
 
+    # get word from user, move it into the accumulator, put it in memorylocation
     def exec(self: instruction, vm: virtualMachine):
-        '''
-        get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
-        self.param is location in memory of destination to write to
-        '''
-        inp = input("Enter a word to read to memory: ")
+        vm.awaitInput = True;
+        vm.reader = self
+        # # self.param is location in memory of destination to write to
+        # inp = input("Enter a word to read to memory: ")
+        
+    
+    def validateInput(self, vm: virtualMachine, value: str):
         # Regex to validate format
-        if not re.search("^(([+]|-)?\d{1,4})$", inp):
+        if not re.search("^(([+]|-)?\d{1,4})$", value):
             raise ValueError(f"Invalid word")
-        temp = int(inp)
+        temp = int(value)
         sign = '+' if temp >= 0 else '-'
         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        vm.awaitInput = False
+        vm.reader = None
+
 
 class load(instruction):
     """
