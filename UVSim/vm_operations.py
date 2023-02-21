@@ -214,7 +214,8 @@ class write(instruction):
         # self.param is location in memory of operand to write
         # vm.vmAccumulator = vm.mainMemory[self.param]
         # print(vm.vmAccumulator)
-        print(vm.mainMemory[self.param])
+        # print(vm.mainMemory[self.param])
+        return vm.mainMemory[self.param]
 
 # class read(instruction):
 #     """

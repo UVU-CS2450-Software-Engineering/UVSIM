@@ -30,7 +30,9 @@ while not vm.exit:
         try:
             mem_val = fetch(vm)
             instruction = decode(mem_val)
-            instruction.exec(vm)
+            val = instruction.exec(vm)
+            if val:
+                print(val)
         except Exception as e:
             displayError(e)
     if vm.awaitInput:

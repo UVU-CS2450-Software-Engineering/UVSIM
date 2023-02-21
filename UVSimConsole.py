@@ -28,7 +28,9 @@ def main():
             try:
                 mem_val = fetch.fetch(v_machine)
                 instruction = decode.decode(mem_val)
-                instruction.exec(v_machine)
+                val = instruction.exec(v_machine)
+                if val:
+                    print(val)
             except Exception as e:
                 displayError(e)
         if v_machine.awaitInput:
