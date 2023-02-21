@@ -4,6 +4,7 @@ Requirements
     - Python 3.11.x
 
     Python Modules
+    - customtkinter
     - pytest
     - re
     - sys

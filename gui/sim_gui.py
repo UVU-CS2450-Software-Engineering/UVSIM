@@ -1,4 +1,4 @@
-# from UVSim import *
+from UVSim import *
 
 # from tkinter import *
 from tkinter import filedialog
@@ -10,12 +10,10 @@ import customtkinter as ctk
 MAX_PROGRAM_SIZE = 100
 
 class ScrollableLabelInputFrame(ctk.CTkScrollableFrame):
-    def __init__(self, master, command=None, **kwargs):
+    def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
         self.grid_columnconfigure(0, weight=1)
 
-        self.command = command
-        self.radiobutton_variable = ctk.StringVar()
         self.label_list = []
         self.entry_list = []
 
@@ -40,7 +38,7 @@ class ScrollableLabelInputFrame(ctk.CTkScrollableFrame):
                 return
 
 
-class SIMGUI(ctk.CTk):
+class SimGui(ctk.CTk):
     def __init__(self):
         super().__init__()
 
@@ -53,16 +51,20 @@ class SIMGUI(ctk.CTk):
         self.title('UVSim')
         self.geometry('500x500')
 
-        self.load_button = ctk.CTkButton(self, text='Load Program', command=self.open_file)
+        # Example button with file dialog and entry
+        self.load_button = ctk.CTkButton(self, text='Load Program', command=self.open_file, fg_color='#00B901')
         self.load_button.grid(row=0, column=0, padx=10, pady=10, sticky='nw')
         self.program_path = ctk.CTkEntry(self, width=300)
         self.program_path.grid(row=1, column=0, columnspan=2, padx=10, pady=10, sticky='nw')
 
-        self.memory = ScrollableLabelInputFrame(master=self, width=300, command=None, corner_radius=0)
+        # Memory Widget
+        self.memory = ScrollableLabelInputFrame(master=self, width=300, corner_radius=0)
         self.memory.grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
         for i in range(100):
             self.memory.add_item(f'Loc {i}', '+0000')
 
+
+        # Everything must initialize prior to this line
         self.mainloop()
 
     def open_file(self):
@@ -78,4 +80,4 @@ class SIMGUI(ctk.CTk):
 
 
 if __name__ == '__main__':
-    interface = SIMGUI()
+    interface = SimGui()
