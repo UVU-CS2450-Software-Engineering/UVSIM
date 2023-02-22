@@ -1,4 +1,9 @@
-# from UVSim import *
+import os, sys
+
+dirname = os.getcwd()
+sys.path.insert(0, f'{dirname}/..')
+
+from UVSim import *
 
 import customtkinter as ctk
 
