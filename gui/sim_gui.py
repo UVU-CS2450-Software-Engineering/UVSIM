@@ -13,7 +13,7 @@ class SimGui(ctk.CTk):
     def __init__(self):
         super().__init__()
 
-        # self.v_machine = vm.virtualMachine()
+        self.v_machine = vm.virtualMachine()
         self.program_file = None
 
         ctk.set_appearance_mode('System')
@@ -26,8 +26,15 @@ class SimGui(ctk.CTk):
 
 
         # Memory Widget Group
-        self.memory = MemoryInterface(master=self)
+        self.memory = MemoryInterface(self.v_machine, master=self)
         self.memory.grid(row=2, column=0, padx=10, pady=10, sticky='nsew')
+
+        # Test code for evaluating memory interface.
+        # instructions = read_ml.read_ml('../test/test3.txt')['result']
+        # mem_stack = self.memory.memory_list
+
+        # for index, value in enumerate(instructions):
+        #     mem_stack.add_item(index, value)
 
 
         # IO Widget Group
@@ -42,6 +49,7 @@ class SimGui(ctk.CTk):
 
         # Everything must initialize prior to this line
         self.mainloop()
+
 
 
 if __name__ == '__main__':
