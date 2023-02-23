@@ -9,6 +9,7 @@ import customtkinter as ctk
 
 from memory_interface import MemoryInterface
 from file_picker import FilePicker
+from run_interface import Run
 
 
 class SimGui(ctk.CTk):
@@ -40,17 +41,28 @@ class SimGui(ctk.CTk):
         # IO Widget Group
 
         # Run widget
+        self.run_control = Run(self, self.execute)
+        self.run_control.grid(row=0, column=2, padx=10, pady=10, sticky='nsew')
 
         # Reset Widget
 
         # Replace with load file functionality
         self.file_picker = FilePicker(master=self)
         self.file_picker.grid(
-            row=0, column=0, padx=10, pady=0, columnspan=2, sticky="nsew"
+            row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew"
         )
 
         # Everything must initialize prior to this line
         self.mainloop()
+
+    def execute(self):
+        instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
+        if 'error' in instructions.keys():
+            # Write out error to IO
+            return
+        instructions = instructions['result']
+        for idx, val in enumerate(instructions):
+            self.memory.memory_list.add_item(idx, val)
 
 
 if __name__ == "__main__":
