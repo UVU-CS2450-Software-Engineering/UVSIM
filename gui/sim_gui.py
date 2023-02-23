@@ -8,9 +8,9 @@ from UVSim import *
 import customtkinter as ctk
 
 from memory_interface import MemoryInterface
+from io_widgets import IOWidgets
 from file_picker import FilePicker
 from run_interface import Run
-
 
 class SimGui(ctk.CTk):
     def __init__(self):
@@ -39,6 +39,8 @@ class SimGui(ctk.CTk):
         #     mem_stack.add_item(index, value)
 
         # IO Widget Group
+        self.io_widgets = IOWidgets(self.v_machine, master=self)
+        self.io_widgets.grid(row=2, column=3, padx=10, pady=10, sticky='nsew')
 
         # Run widget
         self.run_control = Run(self, self.execute)
