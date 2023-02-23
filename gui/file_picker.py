@@ -16,7 +16,7 @@ class FilePicker(ctk.CTkFrame):
         self.button = ctk.CTkButton(
             master=self, command=self.select_file, text="...", width=30
         )
-        self.button.grid(row=0, column=1, padx=0, pady=0)
+        self.button.grid(row=0, column=1, padx=10, pady=10)
 
     def select_file(self):
         """
@@ -34,4 +34,4 @@ class FilePicker(ctk.CTkFrame):
         """
         Return the selected file_path
         """
-        return self.text_file
+        return self.text_file.get()
