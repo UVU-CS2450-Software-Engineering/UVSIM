@@ -40,7 +40,7 @@ class SimGui(ctk.CTk):
 
         # IO Widget Group
         self.io_widgets = IOWidgets(self.v_machine, master=self)
-        self.io_widgets.grid(row=2, column=3, padx=10, pady=10, sticky='nsew')
+        self.io_widgets.grid(row=2, column=2, padx=10, pady=10, sticky='nsew')
 
         # Run widget
         self.run_control = Run(self, self.execute)
