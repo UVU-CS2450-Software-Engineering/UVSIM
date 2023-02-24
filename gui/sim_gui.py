@@ -71,25 +71,7 @@ class SimGui(ctk.CTk):
             self.memory.memory_list.add_item(idx, val)
 
         #Run the program
-        while not self.v_machine.exit:
-            while not self.v_machine.awaitInput and not self.v_machine.exit:
-                try:
-                    mem_val = fetch.fetch(self.v_machine)
-                    instruction = decode.decode(mem_val)
-                    val = instruction.exec(self.v_machine)
-                    if val:
-                        print(val)
-                        # self.IO.print/write
-                except Exception as e:
-                    print(e)
-                    # self.IO print error (e)
-            if self.v_machine.awaitInput:
-                self.read()
-                #IO indicate awaiting input
-
-            else:
-                #end program
-                self.destroy()
+        self.execute()
 
     def execute(self):
         #Run the program
