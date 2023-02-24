@@ -6,12 +6,10 @@ sys.path.insert(0, f"{dirname}/..")
 from UVSim import *
 
 import customtkinter as ctk
-
 from memory_interface import MemoryInterface
 from io_widgets import IOWidgets
 from file_picker import FilePicker
 from run_interface import Run
-
 class SimGui(ctk.CTk):
     def __init__(self):
         super().__init__()
@@ -76,7 +74,50 @@ class SimGui(ctk.CTk):
     def execute(self):
         #Run the program
         while not self.v_machine.exit:
-            while not self.v_machine.awaitInput and not self.v_machine.exit:
+            while not self.v_machine.awaitInput and not self.v_machine.exit:#changed 
+                try:
+                    mem_val = fetch.fetch(self.v_machine)
+                    instruction = decode.decode(mem_val)
+                    print(instruction)#debugging
+                    print(instruction.op_name)#debuging
+                    #if read, requestinput
+                    if(instruction.op_name =='READ'):
+                        self.v_machine.reader = instruction
+                        u_r = self.request_input()#this is the users input.
+                        self.memory.memory_list.add_item(instruction.param,u_r)#updating GUI memory display to reflect user's input
+                        
+                    val = instruction.exec(self.v_machine)
+                    
+                    if val:
+                        print(val)
+                        # self.IO.print/write
+                except Exception as e:
+                    self.io_widgets.set_output(e)
+                    print(e)
+                    # self.IO print error (e)
+            else:
+                #end program
+                self.v_machine.exit = True
+
+    def request_input(self):
+        self.io_widgets.set_output('Enter a word to read to memory: ')
+        #value = IO get input from user
+        user_input = self.io_widgets.get_input()
+        print(type(user_input))#debugging
+        self.v_machine.reader.validateInput(self.v_machine, str(user_input))#why?
+        self.memory.memory_list.set_accum(user_input)#set accumulator to new value
+        self.io_widgets.update_accumulator()#update gui value
+        return user_input
+
+
+'''
+    #def read_execute(self):
+        #put in accumulator
+        #while not self.v_machine.exit:
+            
+            #self.memory.memory_list.add_item(idx, self.v_machine.reader)
+            
+            while not self.v_machine.exit:# not self.v_machine.awaitInput and
                 try:
                     mem_val = fetch.fetch(self.v_machine)
                     instruction = decode.decode(mem_val)
@@ -85,50 +126,14 @@ class SimGui(ctk.CTk):
                         print(val)
                         # self.IO.print/write
                 except Exception as e:
-                    self.io_widgets.set_output(e)
-                    print(e)
-                    # self.IO print error (e)
-            if self.v_machine.awaitInput:
-                self.read()
-                print('hit')
-                #IO indicate awaiting input
-
-            else:
-                #end program
-                self.v_machine.exit = True
-
-    def read(self):
-        # On IO submit button click
-        self.io_widgets.set_output('Enter a word to read to memory: ')
-        user_input = self.io_widgets.get_input()
-        print(type(user_input))
-        self.v_machine.reader.validateInput(self.v_machine, str(user_input))
-        self.execute()
-        
-        #value = IO get input from user
-        #self.vm.reader.validateInput(self.vm, value)
-
-
-'''
-    def execute(self):
-        #Run the program
-        while not self.vm.exit:
-            while not self.vm.awaitInput and not self.vm.exit:
-                try:
-                    mem_val = fetch.fetch(self.vm)
-                    instruction = decode.decode(mem_val)
-                    val = instruction.exec(vm)
-                    if val:
-                        print(val)
-                        # self.IO.print/write
-                except Exception as e:
                     continue
                     # self.IO print error (e)
-            if self.vm.awaitInput:
+            #if self.vm.awaitInput:
             #IO indicate awaiting input
+            
 
-            else:
-                End program
+            #else:
+             #   End program
 
     def read(self):
         # On IO submit button click

@@ -255,10 +255,16 @@ class read(instruction):
 
     # get word from user, move it into the accumulator, put it in memorylocation
     def exec(self: instruction, vm: virtualMachine):
-        vm.awaitInput = True;
-        vm.reader = self
-        # # self.param is location in memory of destination to write to
-        # inp = input("Enter a word to read to memory: ")
+        print('hello read')
+        print(vm.vmAccumulator)
+        
+        vm.mainMemory[self.param] = vm.vmAccumulator#only 1 line needed here
+
+        print('this is at memory location # ')
+        print(self.param)
+        print(vm.mainMemory[self.param])
+        #accumulator is set in memory_interface by the gui
+        #self.param is location in memory of destination to write to
         
     
     def validateInput(self, vm: virtualMachine, value: str):

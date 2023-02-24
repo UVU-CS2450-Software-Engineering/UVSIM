@@ -4,9 +4,10 @@ class IOWidgets(ctk.CTkFrame):
     def __init__(self, vm, master) -> None:
         # Create frame and sub-widgets
         super().__init__(master)
+        self.button_pressed = ctk.IntVar()#changed
         self.input_label = ctk.CTkLabel(master=self, text='Input')
         self.input_entry = ctk.CTkEntry(master=self, width=125)
-        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.get_input)
+        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.enter)#changed
 
         self.output_label = ctk.CTkLabel(master=self, text='Output')
         self.output_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=75)
@@ -25,14 +26,15 @@ class IOWidgets(ctk.CTkFrame):
 
         self.accumulator_label.grid(row=5, column=0, padx=10, pady=(5, 0), sticky='nw')
         self.accumulator_text_box.grid(row=6, column=0, padx=10, pady=(0, 5), sticky='nw', columnspan=3)
-
-        # Using this to wait for user input
-        self.var = self.input_entry.get()
         
         self.vm = vm
+    def enter(self):#Using this to wait for user input
+        print('button pressed')
+        self.button_pressed.set(2)
 
     def get_input(self):
-        user_input = self.input_entry.get()
+        self.wait_variable(self.button_pressed)
+        user_input = self.input_entry.get()#changed
         print(user_input)
         return user_input
     
@@ -41,7 +43,6 @@ class IOWidgets(ctk.CTkFrame):
         # need to get output from vm
         self.output_text_box.insert('current', vm_output)
         self.output_text_box.configure(state='disabled')
-        self.update_accumulator()
 
     def update_accumulator(self):
         self.accumulator_text_box.configure(state='normal')
