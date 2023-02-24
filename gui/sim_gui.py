@@ -29,7 +29,7 @@ class SimGui(ctk.CTk):
 
         # Memory Widget Group
         self.memory = MemoryInterface(self.v_machine, master=self)
-        self.memory.grid(row=2, column=0, padx=10, pady=10, sticky="nsew")
+        self.memory.grid(row=1, column=0, padx=10, pady=10, rowspan=2, sticky="nsew")
 
         # Test code for evaluating memory interface.
         # instructions = read_ml.read_ml('../test/test3.txt')['result']
@@ -40,7 +40,7 @@ class SimGui(ctk.CTk):
 
         # IO Widget Group
         self.io_widgets = IOWidgets(self.v_machine, master=self)
-        self.io_widgets.grid(row=2, column=2, padx=10, pady=10, sticky='nsew')
+        self.io_widgets.grid(row=1, column=1, columnspan=2, padx=10, pady=10, sticky='nsew')
 
         # Run widget
         self.run_control = Run(self, self.execute)
@@ -54,6 +54,9 @@ class SimGui(ctk.CTk):
             row=0, column=0, padx=10, pady=10, columnspan=2, sticky="nsew"
         )
 
+        self.close_button = ctk.CTkButton(self, text='Close', command=self.destroy, width=50, height=25)
+        self.close_button.grid(row=2, column=1, padx=10, pady=10, sticky='nsew')
+
         # Everything must initialize prior to this line
         self.mainloop()
 
@@ -65,7 +68,44 @@ class SimGui(ctk.CTk):
         instructions = instructions['result']
         for idx, val in enumerate(instructions):
             self.memory.memory_list.add_item(idx, val)
+'''
+    def load(self):
+        instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
+        if 'error' in instructions.keys():
+            # Write out error to IO
+            return
+        instructions = instructions['result']
+        for idx, val in enumerate(instructions):
+            self.memory.memory_list.add_item(idx, val)
 
+    def execute(self):
+        #Run the program
+        while not self.vm.exit:
+            while not self.vm.awaitInput and not self.vm.exit:
+                try:
+                    mem_val = fetch.fetch(self.vm)
+                    instruction = decode.decode(mem_val)
+                    val = instruction.exec(vm)
+                    if val:
+                        print(val)
+                        # self.IO.print/write
+                except Exception as e:
+                    continue
+                    # self.IO print error (e)
+            if self.vm.awaitInput:
+            #IO indicate awaiting input
+
+            else:
+                End program
+
+    def read(self):
+        # On IO submit button click
+        Validate input
+        #value = IO get input from user
+        #self.vm.reader.validateInput(self.vm, value)
+        trigger self.execute()
+        
+'''
 
 if __name__ == "__main__":
     SimGui()
