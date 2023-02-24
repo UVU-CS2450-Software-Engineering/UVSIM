@@ -60,7 +60,7 @@ class SimGui(ctk.CTk):
         # Everything must initialize prior to this line
         self.mainloop()
 
-    def execute(self):
+    def load(self):
         instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
         if 'error' in instructions.keys():
             # Write out error to IO
@@ -68,6 +68,50 @@ class SimGui(ctk.CTk):
         instructions = instructions['result']
         for idx, val in enumerate(instructions):
             self.memory.memory_list.add_item(idx, val)
+        self.execute()
+
+
+# New code for execute and get_value()
+    def execute(self):
+            while not self.v_machine.awaitInput and not self.v_machine.exit:
+                try:
+                    mem_val = fetch.fetch(self.v_machine)
+                    instruction = decode.decode(mem_val)
+                    val = instruction.exec(self.v_machine)
+                    self.io_widgets.set_output(f'Return Val: {val}')
+
+                    # val = {'write': value} OR {'store': {'location': INT, 'value': value}}
+                    # if val and 'write' in val.keys():
+                    #     # modify to handle store and GUI IO
+                    #     print(val)
+                    # elif val and 'store' in val.key():
+                    #     idx = val['store']['index']
+                    #     val = val['store']['value']
+                    #     self.memory.memory_list.add_item(idx, val)
+                    # elif val and 'acc' in val.keys():
+                    #     set_accumulator(val)
+
+                except Exception as e:
+                    self.io_widgets.set_output(f'Exception: {e}')
+            if self.v_machine.exit:
+                self.io_widgets.set_output('Program complete.')
+            elif self.v_machine.awaitInput:
+                self.io_widgets.set_output('Enter a value: ')
+
+    def get_input(self, value):
+        try:
+            val = self.v_machine.reader.validate(value)
+            idx = val['store']['index']
+            val = val['store']['value']
+            self.memory.memory_list.add_item(idx, val)
+            self.execute()
+        except Exception as e:
+            self.io_widgets.set_output('Invalid input')
+            self.io_widgets.set_output('Enter a value: ')
+
+
+
+
 '''
     def load(self):
         instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
