@@ -85,6 +85,7 @@ class SimGui(ctk.CTk):
                         self.v_machine.reader = instruction
                         u_r = self.request_input()#this is the users input.
                         self.memory.memory_list.add_item(instruction.param,u_r)#updating GUI memory display to reflect user's input
+                        self.io_widgets.set_output('>>>'+str(u_r))#output user's input to output box
                         
                     val = instruction.exec(self.v_machine)
                     
@@ -101,10 +102,15 @@ class SimGui(ctk.CTk):
 
     def request_input(self):
         self.io_widgets.set_output('Enter a word to read to memory: ')
-        #value = IO get input from user
-        user_input = self.io_widgets.get_input()
-        print(type(user_input))#debugging
-        self.v_machine.reader.validateInput(self.v_machine, str(user_input))#why?
+        self.v_machine.awaitInput = True#this var is a flag for validateinput
+        while self.v_machine.awaitInput:#infinite loop until we get valid input
+            user_input = self.io_widgets.get_input()#value = IO get input from user
+            print(type(user_input))#debugging
+            try:
+                self.v_machine.reader.validateInput(self.v_machine, str(user_input))#changme
+            except ValueError:
+                print('try again')
+                self.io_widgets.set_output('Invalid input, try again!')
         self.memory.memory_list.set_accum(user_input)#set accumulator to new value
         self.io_widgets.update_accumulator()#update gui value
         return user_input

@@ -269,6 +269,7 @@ class read(instruction):
     
     def validateInput(self, vm: virtualMachine, value: str):
         # Regex to validate format
+        
         if not re.search("^(([+]|-)?\d{1,4})$", value):
             raise ValueError(f"Invalid word")
         temp = int(value)

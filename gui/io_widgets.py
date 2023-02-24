@@ -34,14 +34,13 @@ class IOWidgets(ctk.CTkFrame):
 
     def get_input(self):
         self.wait_variable(self.button_pressed)
-        user_input = self.input_entry.get()#changed
-        print(user_input)
+        user_input = self.input_entry.get()
         return user_input
     
     def set_output(self, vm_output):
         self.output_text_box.configure(state='normal')
         # need to get output from vm
-        self.output_text_box.insert('current', vm_output)
+        self.output_text_box.insert('end',vm_output+'\n')
         self.output_text_box.configure(state='disabled')
 
     def update_accumulator(self):
