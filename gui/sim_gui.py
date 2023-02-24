@@ -43,7 +43,7 @@ class SimGui(ctk.CTk):
         self.io_widgets.grid(row=1, column=1, columnspan=2, padx=10, pady=10, sticky='nsew')
 
         # Run widget
-        self.run_control = Run(self, self.execute)
+        self.run_control = Run(self, self.load)
         self.run_control.grid(row=0, column=2, padx=10, pady=10, sticky='nsew')
 
         # Reset Widget
@@ -60,16 +60,8 @@ class SimGui(ctk.CTk):
         # Everything must initialize prior to this line
         self.mainloop()
 
-    def execute(self):
-        instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
-        if 'error' in instructions.keys():
-            # Write out error to IO
-            return
-        instructions = instructions['result']
-        for idx, val in enumerate(instructions):
-            self.memory.memory_list.add_item(idx, val)
-'''
     def load(self):
+        # load commands from file
         instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
         if 'error' in instructions.keys():
             # Write out error to IO
@@ -78,6 +70,64 @@ class SimGui(ctk.CTk):
         for idx, val in enumerate(instructions):
             self.memory.memory_list.add_item(idx, val)
 
+        #Run the program
+        while not self.v_machine.exit:
+            while not self.v_machine.awaitInput and not self.v_machine.exit:
+                try:
+                    mem_val = fetch.fetch(self.v_machine)
+                    instruction = decode.decode(mem_val)
+                    val = instruction.exec(self.v_machine)
+                    if val:
+                        print(val)
+                        # self.IO.print/write
+                except Exception as e:
+                    print(e)
+                    # self.IO print error (e)
+            if self.v_machine.awaitInput:
+                self.read()
+                #IO indicate awaiting input
+
+            else:
+                #end program
+                self.destroy()
+
+    def execute(self):
+        #Run the program
+        while not self.v_machine.exit:
+            while not self.v_machine.awaitInput and not self.v_machine.exit:
+                try:
+                    mem_val = fetch.fetch(self.v_machine)
+                    instruction = decode.decode(mem_val)
+                    val = instruction.exec(self.v_machine)
+                    if val:
+                        print(val)
+                        # self.IO.print/write
+                except Exception as e:
+                    self.io_widgets.set_output(e)
+                    print(e)
+                    # self.IO print error (e)
+            if self.v_machine.awaitInput:
+                self.read()
+                print('hit')
+                #IO indicate awaiting input
+
+            else:
+                #end program
+                self.v_machine.exit = True
+
+    def read(self):
+        # On IO submit button click
+        self.io_widgets.set_output('Enter a word to read to memory: ')
+        user_input = self.io_widgets.get_input()
+        print(type(user_input))
+        self.v_machine.reader.validateInput(self.v_machine, str(user_input))
+        self.execute()
+        
+        #value = IO get input from user
+        #self.vm.reader.validateInput(self.vm, value)
+
+
+'''
     def execute(self):
         #Run the program
         while not self.vm.exit:
@@ -104,8 +154,7 @@ class SimGui(ctk.CTk):
         #value = IO get input from user
         #self.vm.reader.validateInput(self.vm, value)
         trigger self.execute()
-        
-'''
+'''      
 
 if __name__ == "__main__":
     SimGui()

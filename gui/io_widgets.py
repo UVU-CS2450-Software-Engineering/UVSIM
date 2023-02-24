@@ -6,7 +6,7 @@ class IOWidgets(ctk.CTkFrame):
         super().__init__(master)
         self.input_label = ctk.CTkLabel(master=self, text='Input')
         self.input_entry = ctk.CTkEntry(master=self, width=125)
-        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.set_output)
+        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.get_input)
 
         self.output_label = ctk.CTkLabel(master=self, text='Output')
         self.output_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=75)
@@ -26,14 +26,20 @@ class IOWidgets(ctk.CTkFrame):
         self.accumulator_label.grid(row=5, column=0, padx=10, pady=(5, 0), sticky='nw')
         self.accumulator_text_box.grid(row=6, column=0, padx=10, pady=(0, 5), sticky='nw', columnspan=3)
 
+        # Using this to wait for user input
+        self.var = self.input_entry.get()
+        
+        self.vm = vm
+
     def get_input(self):
         user_input = self.input_entry.get()
+        print(user_input)
         return user_input
     
-    def set_output(self):
+    def set_output(self, vm_output):
         self.output_text_box.configure(state='normal')
         # need to get output from vm
-        self.output_text_box.insert('current', 'instruction\n')
+        self.output_text_box.insert('current', vm_output)
         self.output_text_box.configure(state='disabled')
         self.update_accumulator()
 
@@ -41,7 +47,8 @@ class IOWidgets(ctk.CTkFrame):
         self.accumulator_text_box.configure(state='normal')
         self.accumulator_text_box.delete('current', 'end')
         # need to get accumulator value from vm
-        self.accumulator_text_box.insert('current', 'acc value')
+        self.accumulator_text_box.insert('current', self.vm.vmAccumulator)
         self.accumulator_text_box.configure(state='disabled')
+
         
         
