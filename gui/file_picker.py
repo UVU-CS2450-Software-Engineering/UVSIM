@@ -28,7 +28,7 @@ class FilePicker(ctk.CTkFrame):
         )
         self.text_file.delete(0, ctk.END)
         self.text_file.insert(0, program_file)
-        print("button pressed")
+        # Execute load command
 
     def get_selected_file_path(self) -> str:
         """
