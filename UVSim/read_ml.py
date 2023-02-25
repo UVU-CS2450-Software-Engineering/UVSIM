@@ -10,7 +10,7 @@ def read_ml(path):
             while instruction:
                 if len(instructions) > 100:
                     raise BufferError('Memory Overflow: Too many lines in program.')
-                # # Regex to validate format
+                #Regex to validate format
                 if not re.search("^(([+]|-)\d+)$", instruction):
                     raise ValueError(f'Invalid word at line: {len(instructions) + 1}')
                 instructions.append(instruction)

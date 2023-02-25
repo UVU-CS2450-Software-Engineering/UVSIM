@@ -4,7 +4,6 @@ dirname = os.getcwd()
 sys.path.insert(0, f"{dirname}/..")
 
 from UVSim import *
-
 import customtkinter as ctk
 from memory_interface import MemoryInterface
 from io_widgets import IOWidgets
@@ -12,6 +11,7 @@ from file_picker import FilePicker
 from run_interface import Run
 from cr_widgets import CRWidgets
 class SimGui(ctk.CTk):
+    '''Graphical user interface that interacts with the business layer through the MemoryInterface class'''
     def __init__(self):
         super().__init__()
 
@@ -56,7 +56,7 @@ class SimGui(ctk.CTk):
         # load commands from file
         instructions = read_ml.read_ml(self.file_picker.get_selected_file_path())
         if 'error' in instructions.keys():
-            # Write out error to IO
+            #self.io_widgets.set_output(str(instructions['error']))# Write out error to IO
             return
         instructions = instructions['result']
         for idx, val in enumerate(instructions):
@@ -69,15 +69,13 @@ class SimGui(ctk.CTk):
  
     def execute(self):
         while not self.v_machine.exit:
-            #self.memory.memory_list.add_item(idx, self.v_machine.reader)
             while not self.v_machine.awaitInput and not self.v_machine.exit:
                 try:
                     mem_val = fetch.fetch(self.v_machine)
                     instruction = decode.decode(mem_val)
                     val = instruction.exec(self.v_machine)
-                    #print(val['key'])#switch statement
                     if val:
-                        match val['key']:
+                        match val['key']:#switch statement
                             case 'math':
                                 self.io_widgets.update_accumulator()
                                 break
@@ -105,14 +103,12 @@ class SimGui(ctk.CTk):
                     try:
                         out = self.v_machine.reader.validateInput(self.v_machine, str(user_input))
                     except ValueError:
-                        #print('try again')
                         self.io_widgets.set_output('Invalid input, try again!')
                 self.memory.memory_list.add_item(int(out['memLocation']), int(out['value']))#memoryinterface sets value
                 self.io_widgets.set_output('>>>'+str(int(out['value'])))#output user's input to output box        
 
-            elif self.v_machine.exit:
-            #   End program   
-                self.io_widgets.set_output('Program complete.')
+            elif self.v_machine.exit:  
+                self.io_widgets.set_output('Program complete.')#End program
 
 if __name__ == "__main__":
     SimGui()
