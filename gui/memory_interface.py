@@ -57,3 +57,5 @@ class ScrollableMemory(ctk.CTkScrollableFrame):
             self.vm.mainMemory[index] = val
         except Exception as e:
             return e
+    def set_accum(self, val):
+        self.vm.vmAccumulator = val
