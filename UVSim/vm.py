@@ -10,3 +10,10 @@ class virtualMachine:
         self.exit = False
         self.awaitInput = False
         self.reader = None
+
+    def reset(self):
+        self.vmAccumulator = 0
+        self.nextInstruction = 0
+        self.exit = False
+        self.awaitInput = False
+        self.reader = None

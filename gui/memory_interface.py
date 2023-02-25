@@ -2,6 +2,7 @@ import customtkinter as ctk
 
 
 class MemoryInterface(ctk.CTkFrame):
+    '''Class for allowing interaction between GUI layer and business layer'''
     def __init__(self, vm, master):
         # Create frame and sub-widgets
         super().__init__(master)
@@ -16,6 +17,7 @@ class MemoryInterface(ctk.CTkFrame):
 
 
 class ScrollableMemory(ctk.CTkScrollableFrame):
+    '''GUI component that is managed by MemoryInterface. Shows values in simulator’s memory'''
     def __init__(self, vm, master, **kwargs):
         super().__init__(master, **kwargs)
         self.grid_columnconfigure(0, weight=1)
