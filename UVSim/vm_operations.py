@@ -110,6 +110,7 @@ class add(instruction):
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) + vm.vmAccumulator
         )
+        return {'add': {'value': vm.vmAccumulator}}#return so we can update the GUI
 
 class subtract(instruction):
     """
@@ -132,6 +133,7 @@ class subtract(instruction):
         vm.vmAccumulator = (
             vm.vmAccumulator - interpret_as_int(vm.mainMemory[self.param])
         )
+        return {'subtract': {'value': vm.vmAccumulator}}#return so we can update the GUI
 
 class multiply(instruction):
     """
@@ -154,6 +156,7 @@ class multiply(instruction):
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) * vm.vmAccumulator
         )
+        return {'multiply': {'value': vm.vmAccumulator}}#return so we can update the GUI
 
 class divide(instruction):
     """
@@ -172,10 +175,11 @@ class divide(instruction):
         take the value in the accumulator and divide it by the value in memory given by the last two digits of the opcode
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             vm.vmAccumulator // interpret_as_int(vm.mainMemory[self.param])
         )
+        return {'divide': {'value': vm.vmAccumulator}}#return so we can update the GUI
+        
 
 class halt(instruction):
     """
@@ -198,7 +202,6 @@ class write(instruction):
     """
     a class for the write instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "WRITE"
@@ -208,39 +211,10 @@ class write(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         '''
-        get word from the memory location given by the last two digits of the opcode, move it into the accumulator,
-        output it to the screen
+        get word from the memory location given by the last two digits of the opcode, output it to the screen
         '''
-        # self.param is location in memory of operand to write
-        # vm.vmAccumulator = vm.mainMemory[self.param]
-        # print(vm.vmAccumulator)
-        # print(vm.mainMemory[self.param])
-        return vm.mainMemory[self.param]
-
-# class read(instruction):
-#     """
-#     a class for the read instruction
-#     """
-
-#     def __init__(self: instruction, instr: int) -> None:
-#         super().__init__(instr)
-#         self.op_name: str = "READ"
-#         assert (
-#             self.op_code == 10
-#         ), "Tried to create a read instruction with mismatched op code"
-
-#     def exec(self: instruction, vm: virtualMachine):
-#         '''
-#         get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
-#         self.param is location in memory of destination to write to
-#         '''
-#         inp = input("Enter a word to read to memory: ")
-#         # Regex to validate format
-#         if not re.search("^(([+]|-)?\d{1,4})$", inp):
-#             raise ValueError(f"Invalid word")
-#         temp = int(inp)
-#         sign = '+' if temp >= 0 else '-'
-#         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        # self.param is location in memory of operand to write 
+        return {'write': {'value': vm.mainMemory[self.param]}}#return so we can update the GUI
 
 class read(instruction):
     """
@@ -253,37 +227,28 @@ class read(instruction):
             self.op_code == 10
         ), "Tried to create a read instruction with mismatched op code"
 
-    # get word from user, move it into the accumulator, put it in memorylocation
     def exec(self: instruction, vm: virtualMachine):
-        print('hello read')
-        print(vm.vmAccumulator)
-        
-        vm.mainMemory[self.param] = vm.vmAccumulator#only 1 line needed here
-
-        print('this is at memory location # ')
-        print(self.param)
-        print(vm.mainMemory[self.param])
-        #accumulator is set in memory_interface by the gui
+        vm.awaitInput=True
+        vm.reader=self
         #self.param is location in memory of destination to write to
         
-    
     def validateInput(self, vm: virtualMachine, value: str):
         # Regex to validate format
-        
         if not re.search("^(([+]|-)?\d{1,4})$", value):
             raise ValueError(f"Invalid word")
         temp = int(value)
         sign = '+' if temp >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        validated = f'{sign}{abs(temp):0>4}'
+        vm.mainMemory[self.param] = validated
         vm.awaitInput = False
         vm.reader = None
-
-
+        #return {'read': {'value': validated}, 'memLocation': {self.param}}
+        return {'read': validated, 'memLocation': self.param}
+    
 class load(instruction):
     """
     a class for the load instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "LOAD"
@@ -295,12 +260,12 @@ class load(instruction):
         '''get word from the memory location given by the last two digits of the opcode, move it into the accumulator'''
         # self.param is location in memory of operand to write
         vm.vmAccumulator = int(vm.mainMemory[self.param])
+        return {'load': {'value': int(vm.mainMemory[self.param])}}#return so we can update the GUI
 
 class store(instruction):
     """
     a class for the store instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "STORE"
@@ -312,4 +277,6 @@ class store(instruction):
         '''Store a word from the accumulator into a specific location in memory given by the last two digits of the opcode'''
         # self.param is location in memory of destination
         sign = '+' if vm.vmAccumulator >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
+        out = f'{sign}{abs(vm.vmAccumulator):0>4}'
+        vm.mainMemory[self.param] = out
+        return {'store': {'value': out}}#return so we can update the GUI
