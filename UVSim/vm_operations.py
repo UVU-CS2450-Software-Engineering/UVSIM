@@ -52,6 +52,7 @@ class branch(instruction):
         Set the nextInstruction pointer to the arguement passed in param
         """
         vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class branch_neg(instruction):
     """
@@ -70,6 +71,7 @@ class branch_neg(instruction):
         """
         if vm.vmAccumulator < 0:
             vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class branch_zero(instruction):
     """
@@ -88,6 +90,7 @@ class branch_zero(instruction):
         """
         if vm.vmAccumulator == 0:
             vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class add(instruction):
     """
@@ -106,16 +109,15 @@ class add(instruction):
         take the value from the location in memory given by the last two digits of the opcode and add it to the value in the accumulator
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) + vm.vmAccumulator
         )
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class subtract(instruction):
     """
     a class for the subtract instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "SUBTRACT"
@@ -128,10 +130,10 @@ class subtract(instruction):
         take the value in the accumulator and subtract it by value from the location in memory given by the last two digits of the opcode
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             vm.vmAccumulator - interpret_as_int(vm.mainMemory[self.param])
         )
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class multiply(instruction):
     """
@@ -154,6 +156,7 @@ class multiply(instruction):
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) * vm.vmAccumulator
         )
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class divide(instruction):
     """
@@ -172,11 +175,11 @@ class divide(instruction):
         take the value in the accumulator and divide it by the value in memory given by the last two digits of the opcode
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             vm.vmAccumulator // interpret_as_int(vm.mainMemory[self.param])
         )
-
+        return {'key':'math', 'value': vm.vmAccumulator}
+        
 class halt(instruction):
     """
     a class for the halt instruction
@@ -198,7 +201,6 @@ class write(instruction):
     """
     a class for the write instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "WRITE"
@@ -208,39 +210,11 @@ class write(instruction):
 
     def exec(self: instruction, vm: virtualMachine):
         '''
-        get word from the memory location given by the last two digits of the opcode, move it into the accumulator,
-        output it to the screen
+        get word from the memory location given by the last two digits of the opcode, output it to the screen
         '''
         # self.param is location in memory of operand to write
-        # vm.vmAccumulator = vm.mainMemory[self.param]
-        # print(vm.vmAccumulator)
-        # print(vm.mainMemory[self.param])
-        return vm.mainMemory[self.param]
-
-# class read(instruction):
-#     """
-#     a class for the read instruction
-#     """
-
-#     def __init__(self: instruction, instr: int) -> None:
-#         super().__init__(instr)
-#         self.op_name: str = "READ"
-#         assert (
-#             self.op_code == 10
-#         ), "Tried to create a read instruction with mismatched op code"
-
-#     def exec(self: instruction, vm: virtualMachine):
-#         '''
-#         get word from user, move it into the accumulator, put it in the memory location given by the last two digits of the opcode
-#         self.param is location in memory of destination to write to
-#         '''
-#         inp = input("Enter a word to read to memory: ")
-#         # Regex to validate format
-#         if not re.search("^(([+]|-)?\d{1,4})$", inp):
-#             raise ValueError(f"Invalid word")
-#         temp = int(inp)
-#         sign = '+' if temp >= 0 else '-'
-#         vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        return {'key':'write', 'value': vm.mainMemory[self.param]}
+        #return {'key':'write', 'value': self.param}
 
 class read(instruction):
     """
@@ -253,30 +227,28 @@ class read(instruction):
             self.op_code == 10
         ), "Tried to create a read instruction with mismatched op code"
 
-    # get word from user, move it into the accumulator, put it in memorylocation
     def exec(self: instruction, vm: virtualMachine):
-        vm.awaitInput = True;
-        vm.reader = self
-        # # self.param is location in memory of destination to write to
-        # inp = input("Enter a word to read to memory: ")
+        vm.awaitInput=True
+        vm.reader=self
+        #self.param is location in memory of destination to write to
         
-    
     def validateInput(self, vm: virtualMachine, value: str):
         # Regex to validate format
         if not re.search("^(([+]|-)?\d{1,4})$", value):
             raise ValueError(f"Invalid word")
         temp = int(value)
         sign = '+' if temp >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(temp):0>4}'
+        validated = f'{sign}{abs(temp):0>4}'
+        vm.mainMemory[self.param] = validated
         vm.awaitInput = False
         vm.reader = None
-
-
+        #return {'read': {'value': validated}, 'memLocation': {self.param}}
+        return {'key':'read', 'value': validated, 'memLocation': self.param}
+    
 class load(instruction):
     """
     a class for the load instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "LOAD"
@@ -288,12 +260,12 @@ class load(instruction):
         '''get word from the memory location given by the last two digits of the opcode, move it into the accumulator'''
         # self.param is location in memory of operand to write
         vm.vmAccumulator = int(vm.mainMemory[self.param])
+        return {'key':'load', 'value': int(vm.mainMemory[self.param])}
 
 class store(instruction):
     """
     a class for the store instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "STORE"
@@ -305,4 +277,6 @@ class store(instruction):
         '''Store a word from the accumulator into a specific location in memory given by the last two digits of the opcode'''
         # self.param is location in memory of destination
         sign = '+' if vm.vmAccumulator >= 0 else '-'
-        vm.mainMemory[self.param] = f'{sign}{abs(vm.vmAccumulator):0>4}'
+        out = f'{sign}{abs(vm.vmAccumulator):0>4}'
+        vm.mainMemory[self.param] = out
+        return {'key':'store', 'value': out, 'memLocation': self.param}
