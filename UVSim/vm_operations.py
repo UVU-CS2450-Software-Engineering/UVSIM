@@ -52,6 +52,7 @@ class branch(instruction):
         Set the nextInstruction pointer to the arguement passed in param
         """
         vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class branch_neg(instruction):
     """
@@ -70,6 +71,7 @@ class branch_neg(instruction):
         """
         if vm.vmAccumulator < 0:
             vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class branch_zero(instruction):
     """
@@ -88,6 +90,7 @@ class branch_zero(instruction):
         """
         if vm.vmAccumulator == 0:
             vm.nextInstruction = self.param
+        return {'key':'control', 'value': None}
 
 class add(instruction):
     """
@@ -106,17 +109,15 @@ class add(instruction):
         take the value from the location in memory given by the last two digits of the opcode and add it to the value in the accumulator
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) + vm.vmAccumulator
         )
-        return {'add': {'value': vm.vmAccumulator}}#return so we can update the GUI
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class subtract(instruction):
     """
     a class for the subtract instruction
     """
-
     def __init__(self: instruction, instr: int) -> None:
         super().__init__(instr)
         self.op_name: str = "SUBTRACT"
@@ -129,11 +130,10 @@ class subtract(instruction):
         take the value in the accumulator and subtract it by value from the location in memory given by the last two digits of the opcode
         store in the accumulator
         """
-
         vm.vmAccumulator = (
             vm.vmAccumulator - interpret_as_int(vm.mainMemory[self.param])
         )
-        return {'subtract': {'value': vm.vmAccumulator}}#return so we can update the GUI
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class multiply(instruction):
     """
@@ -156,7 +156,7 @@ class multiply(instruction):
         vm.vmAccumulator = (
             interpret_as_int(vm.mainMemory[self.param]) * vm.vmAccumulator
         )
-        return {'multiply': {'value': vm.vmAccumulator}}#return so we can update the GUI
+        return {'key':'math', 'value': vm.vmAccumulator}
 
 class divide(instruction):
     """
@@ -178,9 +178,8 @@ class divide(instruction):
         vm.vmAccumulator = (
             vm.vmAccumulator // interpret_as_int(vm.mainMemory[self.param])
         )
-        return {'divide': {'value': vm.vmAccumulator}}#return so we can update the GUI
+        return {'key':'math', 'value': vm.vmAccumulator}
         
-
 class halt(instruction):
     """
     a class for the halt instruction
@@ -213,8 +212,9 @@ class write(instruction):
         '''
         get word from the memory location given by the last two digits of the opcode, output it to the screen
         '''
-        # self.param is location in memory of operand to write 
-        return {'write': {'value': vm.mainMemory[self.param]}}#return so we can update the GUI
+        # self.param is location in memory of operand to write
+        return {'key':'write', 'value': vm.mainMemory[self.param]}
+        #return {'key':'write', 'value': self.param}
 
 class read(instruction):
     """
@@ -243,7 +243,7 @@ class read(instruction):
         vm.awaitInput = False
         vm.reader = None
         #return {'read': {'value': validated}, 'memLocation': {self.param}}
-        return {'read': validated, 'memLocation': self.param}
+        return {'key':'read', 'value': validated, 'memLocation': self.param}
     
 class load(instruction):
     """
@@ -260,7 +260,7 @@ class load(instruction):
         '''get word from the memory location given by the last two digits of the opcode, move it into the accumulator'''
         # self.param is location in memory of operand to write
         vm.vmAccumulator = int(vm.mainMemory[self.param])
-        return {'load': {'value': int(vm.mainMemory[self.param])}}#return so we can update the GUI
+        return {'key':'load', 'value': int(vm.mainMemory[self.param])}
 
 class store(instruction):
     """
@@ -279,4 +279,4 @@ class store(instruction):
         sign = '+' if vm.vmAccumulator >= 0 else '-'
         out = f'{sign}{abs(vm.vmAccumulator):0>4}'
         vm.mainMemory[self.param] = out
-        return {'store': {'value': out}}#return so we can update the GUI
+        return {'key':'store', 'value': out, 'memLocation': self.param}

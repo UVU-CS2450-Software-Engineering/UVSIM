@@ -70,78 +70,50 @@ class SimGui(ctk.CTk):
 
         #Run the program
         self.execute()
-        '''
-    def execute(self):
-        #Run the program
-        while not self.v_machine.exit:
-            while not self.v_machine.awaitInput and not self.v_machine.exit:#changed 
-                try:
-                    mem_val = fetch.fetch(self.v_machine)
-                    instruction = decode.decode(mem_val)
-                    print(instruction)#debugging
-                    print(instruction.op_name)#debuging
-                    #if read, requestinput
-                    if(instruction.op_name =='READ'):
-                        self.v_machine.reader = instruction
-                        u_r = self.request_input()#this is the users input.
-                        self.memory.memory_list.add_item(instruction.param,u_r)#updating GUI memory display to reflect user's input
-                        self.io_widgets.set_output('>>>'+str(u_r))#output user's input to output box
-                        
-                    val = instruction.exec(self.v_machine)
-                    
-                    if val:#if val is write command
-                        print(val)
-                        # self.IO.print/write
-                except Exception as e:
-                    self.io_widgets.set_output(e)
-                    print(e)
-                    # self.IO print error (e)
-            else:
-                #end program
-                self.v_machine.exit = True
-
-    def request_input(self):
-        self.io_widgets.set_output('Enter a word to read to memory: ')
-        self.v_machine.awaitInput = True#this var is a flag for validateinput
-        while self.v_machine.awaitInput:#infinite loop until we get valid input
-            user_input = self.io_widgets.get_input()#value = IO get input from user
-            print(type(user_input))#debugging
-            try:
-                self.v_machine.reader.validateInput(self.v_machine, str(user_input))#changme
-            except ValueError:
-                print('try again')
-                self.io_widgets.set_output('Invalid input, try again!')
-        self.memory.memory_list.set_accum(user_input)#set accumulator to new value
-        self.io_widgets.update_accumulator()#update gui value
-        return user_input
-
-        '''
+ 
     def execute(self):
         while not self.v_machine.exit:
             #self.memory.memory_list.add_item(idx, self.v_machine.reader)
-            while not self.v_machine.awaitInput and not self.v_machine.exit:#
+            while not self.v_machine.awaitInput and not self.v_machine.exit:
                 try:
                     mem_val = fetch.fetch(self.v_machine)
                     instruction = decode.decode(mem_val)
                     val = instruction.exec(self.v_machine)
+                    #print(val['key'])#switch statement
                     if val:
-                        print(val)
-                        # self.IO.print/write
+                        match val['key']:
+                            case 'math':
+                                self.io_widgets.update_accumulator()
+                                break
+                            case 'write':
+                                self.io_widgets.set_output(str(val['value']))
+                                break
+                            case 'store':
+                                self.io_widgets.update_accumulator()#from the accumulator into memory
+                                self.memory.memory_list.add_item(int(val['memLocation']), int(val['value']))#memoryinterface sets value
+                                break
+                            case 'load':
+                                self.io_widgets.update_accumulator()
+                                break
+                            case default:#control ops
+                                print('default switch')
+                                break
+                            
                 except Exception as e:
+                    self.io_widgets.set_output('somethings wrong!')
                     continue
-                    # self.IO print error (e)
             if self.v_machine.awaitInput:
             #IO indicate awaiting input
                 self.io_widgets.set_output('Enter a word to read to memory: ')
                 while self.v_machine.awaitInput:#infinite loop until we get valid input
                     user_input = self.io_widgets.get_input()#value = IO get input from user
-                    print(type(user_input))#debugging
                     try:
                         out = self.v_machine.reader.validateInput(self.v_machine, str(user_input))
                     except ValueError:
-                        print('try again')
+                        #print('try again')
                         self.io_widgets.set_output('Invalid input, try again!')
-                self.memory.memory_list.add_item(int(out['memLocation']), int(out['read']))#memoryinterface sets value          
+                self.memory.memory_list.add_item(int(out['memLocation']), int(out['value']))#memoryinterface sets value
+                self.io_widgets.set_output('>>>'+str(int(out['value'])))#output user's input to output box        
 
             #else:
             #   End program   

@@ -15,7 +15,6 @@ class IOWidgets(ctk.CTkFrame):
         self.accumulator_label = ctk.CTkLabel(master=self, text='Accumulator Value')
         self.accumulator_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=25)
 
-
         # Pack sub-widgets in frame using grid
         self.input_label.grid(row=1, column=0, padx=10, pady=(10, 0), sticky='nw')
         self.input_entry.grid(row=2, column=0, padx=(10, 1), pady=(0, 5), sticky='nw', columnspan=2)
@@ -29,7 +28,6 @@ class IOWidgets(ctk.CTkFrame):
         
         self.vm = vm
     def enter(self):#Using this to wait for user input
-        print('button pressed')
         self.button_pressed.set(2)
 
     def get_input(self):
@@ -39,16 +37,11 @@ class IOWidgets(ctk.CTkFrame):
     
     def set_output(self, vm_output):
         self.output_text_box.configure(state='normal')
-        # need to get output from vm
-        self.output_text_box.insert('end',vm_output+'\n')
+        self.output_text_box.insert('end',vm_output+'\n')#output from vm
         self.output_text_box.configure(state='disabled')
 
     def update_accumulator(self):
         self.accumulator_text_box.configure(state='normal')
-        self.accumulator_text_box.delete('current', 'end')
-        # need to get accumulator value from vm
-        self.accumulator_text_box.insert('current', self.vm.vmAccumulator)
+        self.accumulator_text_box.delete('0.0', 'end')#clear current accumulator textbox
+        self.accumulator_text_box.insert('current', self.vm.vmAccumulator)#get accumulator value from vm
         self.accumulator_text_box.configure(state='disabled')
-
-        
-        
