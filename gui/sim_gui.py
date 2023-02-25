@@ -61,6 +61,7 @@ class SimGui(ctk.CTk):
         instructions = instructions['result']
         for idx, val in enumerate(instructions):
             self.memory.memory_list.add_item(idx, val)
+        self.v_machine.reset()
 
         #Run the program
         if run:
