@@ -105,13 +105,15 @@ class SimGui(ctk.CTk):
     def get_input(self):
         try:
             value = self.io_widgets.get_in()
-            val = self.v_machine.reader.validate(value)
+            print('value = ', value)
+            val = self.v_machine.reader.validate(value) # Maybe this will be fixed with return statements
+            print('val = ', val)
             idx = val['store']['index']
             val = val['store']['value']
             self.memory.memory_list.add_item(idx, val)
             self.execute()
         except Exception as e:
-            self.io_widgets.set_output('Invalid input')
+            self.io_widgets.set_output('Invalid input' + str(e))
             self.io_widgets.set_output('Enter a value: ')
 
 
