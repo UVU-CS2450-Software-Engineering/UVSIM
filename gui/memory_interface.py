@@ -7,7 +7,7 @@ class MemoryInterface(ctk.CTkFrame):
         super().__init__(master)
         self.mem_loc_label = ctk.CTkLabel(master=self, text='Address')
         self.mem_val_label = ctk.CTkLabel(master=self, text='Value')
-        self.memory_list = ScrollableMemory(vm, master=self, width=150, height=400, corner_radius=0)
+        self.memory_list = ScrollableMemory(vm, master=self, width=150, height=300, corner_radius=0)
         
         # Pack sub-widgets in frame using grid
         self.mem_loc_label.grid(row=1, column=0, padx=10, pady=10, sticky='nw')
@@ -16,9 +16,6 @@ class MemoryInterface(ctk.CTkFrame):
 
 
 class ScrollableMemory(ctk.CTkScrollableFrame):
-    # DEFAULT_MEMORY = '+0000'
-    # MEMORY_SIZE = 100
-
     def __init__(self, vm, master, **kwargs):
         super().__init__(master, **kwargs)
         self.grid_columnconfigure(0, weight=1)
