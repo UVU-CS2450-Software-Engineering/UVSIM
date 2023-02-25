@@ -39,11 +39,11 @@ class SimGui(ctk.CTk):
         #     mem_stack.add_item(index, value)
 
         # IO Widget Group
-        self.io_widgets = IOWidgets(self.v_machine, master=self)
+        self.io_widgets = IOWidgets(self.v_machine, self.get_input, master=self)
         self.io_widgets.grid(row=1, column=1, columnspan=2, padx=10, pady=10, sticky='nsew')
 
         # Run widget
-        self.run_control = Run(self, self.execute)
+        self.run_control = Run(self, self.load)
         self.run_control.grid(row=0, column=2, padx=10, pady=10, sticky='nsew')
 
         # Reset Widget
@@ -75,9 +75,13 @@ class SimGui(ctk.CTk):
     def execute(self):
             while not self.v_machine.awaitInput and not self.v_machine.exit:
                 try:
+                    print("Entering loop")
                     mem_val = fetch.fetch(self.v_machine)
+                    print("mem_val = ", mem_val)
                     instruction = decode.decode(mem_val)
-                    val = instruction.exec(self.v_machine)
+                    print("instruction = ", instruction)
+                    val = instruction.exec(self.v_machine) 
+                    print("val = ", val) # I think this should work after return statements
                     self.io_widgets.set_output(f'Return Val: {val}')
 
                     # val = {'write': value} OR {'store': {'location': INT, 'value': value}}
@@ -92,14 +96,15 @@ class SimGui(ctk.CTk):
                     #     set_accumulator(val)
 
                 except Exception as e:
-                    self.io_widgets.set_output(f'Exception: {e}')
+                    self.io_widgets.set_output(f"Exception: {e}")
             if self.v_machine.exit:
                 self.io_widgets.set_output('Program complete.')
             elif self.v_machine.awaitInput:
                 self.io_widgets.set_output('Enter a value: ')
 
-    def get_input(self, value):
+    def get_input(self):
         try:
+            value = self.io_widgets.get_in()
             val = self.v_machine.reader.validate(value)
             idx = val['store']['index']
             val = val['store']['value']

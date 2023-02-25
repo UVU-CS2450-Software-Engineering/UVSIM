@@ -1,12 +1,12 @@
 import customtkinter as ctk
 
 class IOWidgets(ctk.CTkFrame):
-    def __init__(self, vm, master) -> None:
+    def __init__(self, vm, command, master) -> None:
         # Create frame and sub-widgets
         super().__init__(master)
         self.input_label = ctk.CTkLabel(master=self, text='Input')
         self.input_entry = ctk.CTkEntry(master=self, width=125)
-        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.set_output)
+        self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=command)
 
         self.output_label = ctk.CTkLabel(master=self, text='Output')
         self.output_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=75)
@@ -26,14 +26,15 @@ class IOWidgets(ctk.CTkFrame):
         self.accumulator_label.grid(row=5, column=0, padx=10, pady=(5, 0), sticky='nw')
         self.accumulator_text_box.grid(row=6, column=0, padx=10, pady=(0, 5), sticky='nw', columnspan=3)
 
-    def get_input(self):
+    def get_in(self):
         user_input = self.input_entry.get()
+        self.set_output(user_input)
         return user_input
     
-    def set_output(self):
+    def set_output(self, msg_to_output):
         self.output_text_box.configure(state='normal')
         # need to get output from vm
-        self.output_text_box.insert('current', 'instruction\n')
+        self.output_text_box.insert('end', msg_to_output + "\n")
         self.output_text_box.configure(state='disabled')
         self.update_accumulator()
 
