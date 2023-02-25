@@ -1,4 +1,4 @@
-UVSim
+`UVSim
 
 Requirements
     - Python 3.11.x
@@ -15,15 +15,29 @@ Installation
     2. From GitHub
         a) Clone from git: "git clone https://github.com/UVU-CS2450-Software-Engineering/UVSIM.git"
 
-Running UVSim
-    1. Navigate to the cloned GitHub repository. It should contain the shown directories and files. 
+Running UVSim GUI application
+    1. Navigate to the cloned GitHub repository. It should contain the shown directories and files.
         UVSim <- Navigate here
         | - UVSim
         | - test
         | - README.txt
         | - UVSim.py
+        | - gui
+        | - UVSimConsole.py
+        | - UVSimGUI.py
 
     2.  a) Linux/Mac and some Windows systems with Python 2 alongside Python 3
+            From the terminal execute the following command
+                - "python3 UVSimGUI.py"
+        b) Windows
+            From CMD Prompt/Powershell execute the following command
+                - "python UVSimGUI.py"
+
+Running UVSim Console Application
+
+    You can still run the console app if desired
+
+    1.  a) Linux/Mac and some Windows systems with Python 2 alongside Python 3
             From the terminal execute one of the following commands
                 - "python3 -m UVSim"
                 - "python3 UVSim.py"
@@ -32,18 +46,18 @@ Running UVSim
                 - "python -m UVSim"
                 - "python -m UVSim.py"
 
-    3. When prompted, supply the file path to the desired program.
+    2. When prompted, supply the file path to the desired program.
 
-    4. Enter a value if/when prompted.
+    3. Enter a value if/when prompted.
         * Input Restrictions: Input must be an integer from -9999 to (+)9999 [plus sign is optional]
 
-    5. After the program has completed, press any key to close.
+    4. After the program has completed, press any key to close.
 
 Program Setup
     UVSim utilizes a 100 word memory, where each word is a four digit decimal number.
     Programs will be loaded into memory with each line in the program corresponding to a word.
         * Note: If using an editor with line numbering, the memory location will be the line number minus open
-    
+
     Valid Commands
         I/O operation:
             READ = 10 Read a word from the keyboard into a specific location in memory.
@@ -86,4 +100,4 @@ Program Setup
                 Example: 4220 - Moves to memory location 20 if the value in the accumulator is zero.
 
             HALT = 43 Pause the program
-                Example: 43xx OR 43 - Stops the program. 
+                Example: 43xx OR 43 - Stops the program.
