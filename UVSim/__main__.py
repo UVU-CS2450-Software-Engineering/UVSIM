@@ -31,8 +31,8 @@ while not vm.exit:
             mem_val = fetch(vm)
             instruction = decode(mem_val)
             val = instruction.exec(vm)
-            if val:
-                print(val)
+            if val and val['key'] == 'write':
+                print(val['value'])
         except Exception as e:
             displayError(e)
     if vm.awaitInput:

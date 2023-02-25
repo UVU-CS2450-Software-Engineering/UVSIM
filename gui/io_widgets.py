@@ -6,25 +6,25 @@ class IOWidgets(ctk.CTkFrame):
         super().__init__(master)
         self.button_pressed = ctk.IntVar()#changed
         self.input_label = ctk.CTkLabel(master=self, text='Input')
-        self.input_entry = ctk.CTkEntry(master=self, width=125)
+        self.input_entry = ctk.CTkEntry(master=self, width=175)
         self.input_button = ctk.CTkButton(master=self, text='Submit', width=75, command=self.enter)#changed
 
         self.output_label = ctk.CTkLabel(master=self, text='Output')
-        self.output_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=75)
+        self.output_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=250, height=75)
 
         self.accumulator_label = ctk.CTkLabel(master=self, text='Accumulator Value')
-        self.accumulator_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=200, height=25)
+        self.accumulator_text_box = ctk.CTkTextbox(master=self, yscrollcommand=True, state='disabled', width=250, height=25)
 
         # Pack sub-widgets in frame using grid
         self.input_label.grid(row=1, column=0, padx=10, pady=(10, 0), sticky='nw')
         self.input_entry.grid(row=2, column=0, padx=(10, 1), pady=(0, 5), sticky='nw', columnspan=2)
         self.input_button.grid(row=2, column=2, padx=(1, 10), pady=(0, 5), sticky='nw')
         
-        self.output_label.grid(row=3, column=0, padx=10, pady=(5, 0), sticky='nw')
-        self.output_text_box.grid(row=4, column=0, padx=10, pady=(0, 5), sticky='nw', columnspan=3)
+        self.output_label.grid(row=3, column=0, padx=10, pady=(10, 0), sticky='nw')
+        self.output_text_box.grid(row=4, column=0, padx=10, pady=(0, 10), sticky='nw', columnspan=3)
 
-        self.accumulator_label.grid(row=5, column=0, padx=10, pady=(5, 0), sticky='nw')
-        self.accumulator_text_box.grid(row=6, column=0, padx=10, pady=(0, 5), sticky='nw', columnspan=3)
+        self.accumulator_label.grid(row=5, column=0, padx=10, pady=(10, 0), sticky='nw')
+        self.accumulator_text_box.grid(row=6, column=0, padx=10, pady=(0, 10), sticky='nw', columnspan=3)
         
         self.vm = vm
     def enter(self):#Using this to wait for user input
@@ -39,6 +39,7 @@ class IOWidgets(ctk.CTkFrame):
         self.output_text_box.configure(state='normal')
         self.output_text_box.insert('end',vm_output+'\n')#output from vm
         self.output_text_box.configure(state='disabled')
+        self.output_text_box.see('end')
 
     def update_accumulator(self):
         self.accumulator_text_box.configure(state='normal')
