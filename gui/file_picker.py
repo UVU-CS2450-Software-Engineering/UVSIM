@@ -8,7 +8,6 @@ class FilePicker(ctk.CTkFrame):
     """
     For allowing the user to navigate to a .asm file
     """
-
     def __init__(self, master) -> None:
         super().__init__(master)
         self.text_file = ctk.CTkEntry(master=self, width=300)
